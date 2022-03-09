@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>品牌列表案例</title>
+  <link rel="stylesheet" href="./lib/bootstrap.css">
+  <link rel="stylesheet" href="./css/brandlist.css">
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- 卡片区域 -->
+    <div class="card">
+      <div class="card-header">
+        添加品牌
+      </div>
+      <div class="card-body">
+        <!-- 添加品牌的表单区域 -->
+        <!-- form 表单，有 submit 时间 -->
+        <form @submit.prevent="add">
+          <div class="form-row align-items-center">
+            <div class="col-auto">
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">品牌名称</div>
+                </div>
+                <input type="text" class="form-control" placeholder="请输入品牌名称" v-model.trim="brand">
+              </div>
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary mb-2">添加</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 表格区域 -->
+    <table class="table table-bordered table-hover table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">品牌名称</th>
+          <th scope="col">状态</th>
+          <th scope="col">创建时间</th>
+          <th scope="col">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in list" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" :id="'id' + item.id" v-model="item.status">
+              <label class="custom-control-label" :for="'id' + item.id" v-if="item.status">已启用</label>
+              <label class="custom-control-label" :for="'id' + item.id" v-else>已禁用</label>
+            </div>
+          </td>
+          <td>{{item.time | dateFormat}}</td>
+          <td>
+            <a href="javascript:;" @click="remove(item.id)">删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <script src="./lib/vue-2.6.12.js"></script>
+  <!-- 只要导入了 dayjs 的库文件， 在 window 全局 就可以使用 dayjs() 方法了-->
+  <script src="./lib/dayjs.min.js"></script>
+  <script>
+    // 声明格式化时间的全局过滤器
+    Vue.filter('dateFormat', function (time) {
+      // 对 time 进行格式化处理，得到 YYYY-MM-DD HH:MM:SS
+      // dayjs() 得到当前时间  dayjs(指定时间) 得到指定时间
+      const date = dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+      return date
+    })
+
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        // 用户输入品牌名称
+        brand: '',
+        nextId: 4,
+        list: [
+          // 品牌的列表数据
+          {
+            id: 1,
+            name: '宝马',
+            status: true,
+            time: new Date()
+          },
+          {
+            id: 2,
+            name: '奔驰',
+            status: false,
+            time: new Date()
+          },
+          {
+            id: 3,
+            name: '奥迪',
+            status: true,
+            time: new Date()
+          }
+        ]
+      },
+      methods: {
+        // 点击链接，删除对应品牌
+        remove(id) {
+          this.list = this.list.filter(item => item.id !== id)
+        },
+        // 阻止表单的默认提交行为后，触发 add 方法
+        add() {
+          // 如果 brand 为空，应拦截掉
+          // if 语句只有一行，有 return 可缩写成一行
+          if (this.brand === '') return alert('必须填写品牌名称')
+
+          const obj = {
+            id: this.nextId,
+            name: this.brand,
+            status: true,
+            time: new Date()
+          }
+          this.list.push(obj)
+          this.brand = ''
+          this.nextId++
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
