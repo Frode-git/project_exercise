@@ -1,0 +1,23 @@
+{
+  "id": "3269316",
+  "name": "特效练习",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "194825",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "5388029",
+      "name": "地图_地球_o",
+      "font_class": "ditu_diqiu_o",
+      "unicode": "ebbb",
+      "unicode_decimal": 60347
+    }
+  ]
+}
